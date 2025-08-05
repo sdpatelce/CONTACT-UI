@@ -1,0 +1,39 @@
+<div class="container mt-4">
+  <h2>👨‍👩‍👧‍👦 Contact Manager</h2>
+
+  <!-- Parent Form -->
+  <form (ngSubmit)="saveParent()" class="mb-3">
+    <h5>{{ isEditingParent ? 'Edit Parent' : 'Add Parent' }}</h5>
+    <input class="form-control mb-1" [(ngModel)]="contact.name" name="name" placeholder="Name" required />
+    <input class="form-control mb-1" [(ngModel)]="contact.email" name="email" placeholder="Email" required />
+    <input class="form-control mb-1" [(ngModel)]="contact.phone" name="phone" placeholder="Phone" required />
+    <button class="btn btn-primary me-2" type="submit">{{ isEditingParent ? 'Update' : 'Add' }}</button>
+    <button class="btn btn-secondary" type="button" (click)="resetParentForm()">Cancel</button>
+  </form>
+
+  <!-- Child Form -->
+  <form *ngIf="selectedParentIdForChild" (ngSubmit)="saveChild()" class="mb-3 border p-3">
+    <h6>{{ isEditingChild ? 'Edit Child' : 'Add Child' }}</h6>
+    <input class="form-control mb-1" [(ngModel)]="child.name" name="childName" placeholder="Child Name" required />
+    <input class="form-control mb-1" [(ngModel)]="child.email" name="childEmail" placeholder="Child Email" required />
+    <input class="form-control mb-1" [(ngModel)]="child.phone" name="childPhone" placeholder="Child Phone" required />
+    <button class="btn btn-success me-2" type="submit">{{ isEditingChild ? 'Update Child' : 'Add Child' }}</button>
+    <button class="btn btn-secondary" type="button" (click)="resetChildForm()">Cancel</button>
+  </form>
+
+  <!-- Contact List -->
+  <div *ngFor="let c of contacts" class="border rounded p-3 mb-3">
+    <h5>{{ c.name }} <small>({{ c.email }}, {{ c.phone }})</small></h5>
+    <button class="btn btn-sm btn-warning me-1" (click)="editParent(c)">Edit</button>
+    <button class="btn btn-sm btn-danger me-2" (click)="deleteParent(c.id)">Delete</button>
+    <button class="btn btn-sm btn-primary" (click)="startAddChild(c.id)">Add Child</button>
+
+    <ul class="mt-2" *ngIf="c.children?.length">
+      <li *ngFor="let child of c.children">
+        {{ child.name }} ({{ child.email }}, {{ child.phone }})
+        <button class="btn btn-sm btn-warning ms-2" (click)="editChild(c.id, child)">Edit</button>
+        <button class="btn btn-sm btn-danger" (click)="deleteChild(c.id, child.id)">Delete</button>
+      </li>
+    </ul>
+  </div>
+</div>
